@@ -1,1 +1,3 @@
 node_modules
+test/ui/cypress/cypress.env.json
+.DS_Store

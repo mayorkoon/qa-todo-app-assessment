@@ -1,0 +1,84 @@
+name: Cypress UI Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+
+    env:
+      CYPRESS_username: ${{ secrets.CYPRESS_USERNAME }}
+      CYPRESS_password: ${{ secrets.CYPRESS_PASSWORD }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Start backend server
+        working-directory: backend
+        run: npm start &
+      
+      - name: Start frontend server
+        working-directory: frontend
+        run: npm start &
+
+      - name: Wait for frontend to be ready
+        run: |
+          echo "Waiting for frontend (http://localhost:3000)..."
+          for i in {1..30}; do
+            if curl -s http://localhost:3000 > /dev/null; then
+              echo "Frontend is up!"
+              break
+            fi
+            echo "Waiting for frontend... ($i)"
+            sleep 5
+          done
+
+      - name: Wait for backend to be ready
+        run: |
+          echo "Waiting for backend (http://localhost:5000)..."
+          for i in {1..30}; do
+            if curl -s http://localhost:5000 > /dev/null; then
+              echo "Backend is up!"
+              break
+            fi
+            echo "Waiting for backend... ($i)"
+            sleep 5
+          done
+
+      - name: Install Cypress test dependencies
+        working-directory: test/UI/cypress
+        run: npm ci
+
+      - name: Run Cypress tests
+        working-directory: test/UI/cypress
+        run: npx cypress run
+
+    # Run Postman API tests
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run Postman collection
+        working-directory: test/API
+        run: |
+            newman run Todo.postman_collection.json \
+            -e TODO_APP.postman_environment.json \
+            --reporters cli \
+            --reporter-json-export newman-report.json
