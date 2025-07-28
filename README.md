@@ -194,6 +194,9 @@ npm start
 
 ```
 # Run Cypress tests
+
+Open another terminal and run the script. Use a new terminal to enable the frontend and server stay running
+
 ```bash
 
 npm run test
