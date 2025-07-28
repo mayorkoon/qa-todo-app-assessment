@@ -225,4 +225,4 @@ npx cypress open
 ## 👤 Author
 
 Abiodun Oyawale  
-QA Engineer | Automation Specialist
+QA Engineer
