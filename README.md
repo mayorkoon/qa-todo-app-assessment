@@ -63,32 +63,45 @@ cd qa-todo-app-assessment
 
 This wraps all folders and installs `concurrently` to run frontend & backend together.
 
+```bash
 
 npm install
 
+```
 
 ### 3. Install Frontend and Backend Dependencies
 
-bash
+```bash
+
 npm run install-all
 
+```
 This command is defined in the root `package.json` as:
+
+```json
 
 "scripts": {
   "install-all": "npm --prefix frontend install && npm --prefix backend install && npm --prefix test/UI/cypress install"
 }
+```
 
 ### 4. Start the App (Frontend + Backend)
 
+```bash
+
 npm start
 
+```
 
 This uses `concurrently` to launch both apps:
+
+```json
 
 "scripts": {
   "start": "concurrently \"npm --prefix backend start\" \"npm --prefix frontend start\"",
 }
 
+```
 ---
 
 ## 🧪 UI Testing with Cypress
@@ -96,22 +109,34 @@ This uses `concurrently` to launch both apps:
 ### Folder: `test/UI/cypress`
 
 #### Key Features:
+
 - Cypress tests with Faker.js for dynamic data
 
 #### Run Locally:
 
+```bash
+
 npm run test
 
+```
 
 Where:
+
+```json
 
 "scripts": {
   "test": ""npm --prefix test/UI/cypress run test"
 }
 
+```
+
 to run the test in cypress GUI, cd into the cypress folder and run the command 
 
+```bash
+
 npx cypress open
+
+```
 ---
 
 ## 🌐 API Testing with Postman
@@ -125,15 +150,19 @@ Includes:
 
 ### Run API Tests with Newman:
 
+```bash
 
 npm run test_api
 
+```
 
+```json
 
 "scripts": {
     "test_api": "newman run test/API/todo.postman_collection.json -e test/API/TODO_APPruns .postman_environment.json --reporters cli"
 }
 
+```
 
 ---
 
@@ -153,20 +182,35 @@ Ensure your secrets (`CYPRESS_USERNAME`, `CYPRESS_PASSWORD`) are set in GitHub s
 
 
 # Install everything
+```bash
+
 npm run install-all
 
+```
 # Start app locally
+```bash
+
 npm start
 
+```
 # Run Cypress tests
+```bash
+
 npm run test
 
+```
 # Run API tests
+```bash
+
 npm run test_api
 
+```
 # Open Cypress dashboard
+```bash
+
 npx cypress open
 
+```
 
 ---
 
