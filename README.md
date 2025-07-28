@@ -44,7 +44,7 @@ qa-todo-app/
 ## ✅ Prerequisites
 
 - Node.js >= 18
-- npm >= 7
+- npm >= 9.0.0
 - Git
 - [Postman](https://www.postman.com/downloads/)
 
