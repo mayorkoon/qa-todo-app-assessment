@@ -1,0 +1,729 @@
+{
+	"info": {
+		"_postman_id": "bc69b07e-dc5d-4c52-9b6c-8149562a3b40",
+		"name": "Todo APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6561377"
+	},
+	"item": [
+		{
+			"name": "Login with valid credentials",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\",  ()=> {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 1000ms\", ()=> {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"",
+							"pm.test(\"Response has JSON content type\", ()=> {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"// Response structure tests",
+							"pm.test(\"Response has required properties\", ()=> {",
+							"    pm.expect(res).to.have.property('status');",
+							"    pm.expect(res).to.have.property('message');",
+							"    pm.expect(res).to.have.property('code');",
+							"    pm.expect(res).to.have.property('data');",
+							"});",
+							"",
+							"pm.test(\"Response has correct status value\", ()=> {",
+							"    pm.expect(res.status).to.eql('success');",
+							"});",
+							"",
+							"pm.test(\"Response has correct message\", ()=> {",
+							"    pm.expect(res.message).to.eql('Login successful');",
+							"});",
+							"",
+							"pm.test(\"Response has correct code\", ()=> {",
+							"    pm.expect(res.code).to.eql(200);",
+							"});",
+							"",
+							"// Data object validation",
+							"pm.test(\"Data object exists and has token\", ()=> {",
+							"    pm.expect(res.data).to.be.an('object');",
+							"    pm.expect(res.data).to.have.property('token');",
+							"});",
+							"",
+							"pm.test(\"Token is not empty\", ()=> {",
+							"    pm.expect(res.data.token).to.not.be.empty;",
+							"    pm.expect(res.data.token).to.be.a('string');",
+							"});",
+							"",
+							"// Schema validation test",
+							"pm.test(\"Response matches expected schema\", ()=> {",
+							"    const schema = {",
+							"        type: \"object\",",
+							"        required: [\"status\", \"message\", \"code\", \"data\"],",
+							"        properties: {",
+							"            status: { type: \"string\" },",
+							"            message: { type: \"string\" },",
+							"            code: { type: \"number\" },",
+							"            data: {",
+							"                type: \"object\",",
+							"                required: [\"token\"],",
+							"                properties: {",
+							"                    token: { type: \"string\" }",
+							"                }",
+							"            }",
+							"        }",
+							"    };",
+							"    ",
+							"    pm.expect(pm.response.json()).to.have.jsonSchema(schema);",
+							"});",
+							"",
+							"// Set environment variable for token (for use in subsequent requests)",
+							"pm.test(\"Save token to environment\", ()=> {",
+							"    if (res.data && res.data.token) {",
+							"        pm.environment.set(\"auth_token\", res.data.token);",
+							"        console.log(\"Token saved to environment:\", res.data.token);",
+							"    }",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response body is valid JSON\", ()=> {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"No unexpected properties in root\", ()=> {",
+							"    const expectedKeys = ['status', 'message', 'code', 'data'];",
+							"    const actualKeys = Object.keys(res);",
+							"    pm.expect(actualKeys).to.have.members(expectedKeys);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"test\",\n  \"password\": \"test123\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login with invalid credentials Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 401\",  ()=> {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 1000ms\", ()=> {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"",
+							"pm.test(\"Response has JSON content type\", ()=> {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"// Response structure tests",
+							"pm.test(\"Response has required properties\", ()=> {",
+							"    pm.expect(res).to.have.property('status');",
+							"    pm.expect(res).to.have.property('message');",
+							"    pm.expect(res).to.have.property('code');",
+							"    pm.expect(res).to.have.property('data');",
+							"});",
+							"",
+							"pm.test(\"Response has correct status value\", ()=> {",
+							"    pm.expect(res.status).to.eql('error');",
+							"});",
+							"",
+							"pm.test(\"Response has correct message\", ()=> {",
+							"    pm.expect(res.message).to.eql('Invalid credentials');",
+							"});",
+							"",
+							"pm.test(\"Response has correct code\", ()=> {",
+							"    pm.expect(res.code).to.eql(401);",
+							"});",
+							"",
+							"// Data object validation",
+							"pm.test(\"Data object exists and does not have token\", ()=> {",
+							"    pm.expect(res.data).to.be.null;",
+							"});",
+							"",
+							"// Schema validation test",
+							"pm.test(\"Response matches expected schema\", ()=> {",
+							"    const schema = {",
+							"        type: \"object\",",
+							"        required: [\"status\", \"message\", \"code\", \"data\"],",
+							"        properties: {",
+							"            status: { type: \"string\" },",
+							"            message: { type: \"string\" },",
+							"            code: { type: \"number\" },",
+							"            data: { type: \"null\" } // Fixing the schema to reflect that data can be null",
+							"        }",
+							"    };",
+							"    ",
+							"    pm.expect(pm.response.json()).to.have.jsonSchema(schema);",
+							"});",
+							"",
+							"// Updated to check for token in response data correctly",
+							"pm.test(\"Save token to environment\", ()=> {",
+							"    if (res.data && res.data.token) {",
+							"        pm.environment.set(\"auth_token\", res.data.token);",
+							"        console.log(\"Token saved to environment:\", res.data.token);",
+							"    } else {",
+							"        pm.environment.unset(\"auth_token\"); // Unset if no token present",
+							"        console.log(\"No token found in response data.\");",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"Response body is valid JSON\", ()=> {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"No unexpected properties in root\", ()=> {",
+							"    const expectedKeys = ['status', 'message', 'code', 'data'];",
+							"    const actualKeys = Object.keys(res);",
+							"    pm.expect(actualKeys).to.have.members(expectedKeys);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"test\",\n  \"password\": \"test1234\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Items",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json()",
+							"",
+							"pm.test(\"Status code is 200\", ()=> {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has success status\", ()=> {",
+							"    pm.expect(res.status).to.eql(\"success\");",
+							"});",
+							"",
+							"pm.test(\"Message is correct\", ()=> {",
+							"    pm.expect(res.message).to.eql(\"Todos fetched successfully\");",
+							"});",
+							"",
+							"pm.test(\"Code is 200\", ()=> {",
+							"    pm.expect(res.code).to.eql(200);",
+							"});",
+							"",
+							"pm.test(\"Data is an array\", ()=> {",
+							"    pm.expect(res.data).to.be.an(\"array\");",
+							"});",
+							"",
+							"pm.test(\"Each todo item has id and text\", ()=> {",
+							"    res.data.forEach(item => {",
+							"        pm.expect(item).to.have.property(\"id\");",
+							"        pm.expect(item).to.have.property(\"text\");",
+							"        pm.expect(item.id).to.be.a(\"number\");",
+							"        pm.expect(item.text).to.be.a(\"string\");",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Items",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();",
+							"var create_text = pm.environment.get(\"create_text\");",
+							"",
+							"pm.environment.set(\"todoId\", res.data.id); // Store the created todo ID in the environment variable",
+							"",
+							"pm.test(\"Status code is 201\", ()=> {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response status is 'success'\", ()=> {",
+							"    pm.expect(res.status).to.eql(\"success\");",
+							"});",
+							"",
+							"pm.test(\"Message is correct\", ()=> {",
+							"    pm.expect(res.message).to.eql(\"Todo created successfully\");",
+							"});",
+							"",
+							"pm.test(\"Code is 201\", ()=> {",
+							"    pm.expect(res.code).to.eql(201);",
+							"});",
+							"",
+							"pm.test(\"Data object contains id and text\", ()=> {",
+							"    pm.expect(res.data).to.have.property(\"id\");",
+							"    pm.expect(res.data).to.have.property(\"text\");",
+							"    pm.expect(res.data.id).to.be.a(\"number\");",
+							"    pm.expect(res.data.text).to.be.a(\"string\");",
+							"});",
+							"pm.test(\"Verify that request and response text match\",()=>{",
+							"    pm.expect(res.data.text).to.eql(create_text);",
+							"})",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var req = JSON.parse(pm.request.body.raw);",
+							"",
+							"pm.environment.set(\"create_text\",req.text)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"text\": \"Text My Sister\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Items with empty text",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 400\", ()=> {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response status is 'error'\", ()=> {",
+							"    pm.expect(res.status).to.eql(\"error\");",
+							"});",
+							"",
+							"pm.test(\"Message is 'Validation failed'\", ()=> {",
+							"    pm.expect(res.message).to.eql(\"Validation failed\");",
+							"});",
+							"",
+							"pm.test(\"Code is 400\", ()=> {",
+							"    pm.expect(res.code).to.eql(400);",
+							"});",
+							"",
+							"pm.test(\"Errors array contains 'Text is required' message\", ()=> {",
+							"    const errors = res.data.errors;",
+							"    ",
+							"    pm.expect(errors).to.be.an(\"array\").that.is.not.empty;",
+							"    ",
+							"    const textError = errors.find(err => err.path === \"text\");",
+							"    pm.expect(textError).to.be.an(\"object\");",
+							"    pm.expect(textError.msg).to.eql(\"Text is required\");",
+							"    pm.expect(textError.location).to.eql(\"body\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"text\": \"\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Items",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var req = JSON.parse(pm.request.body.raw);",
+							"",
+							"pm.environment.set(\"update_text\",req.text)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();",
+							"var update_text = pm.environment.get(\"update_text\");",
+							"",
+							"pm.test(\"Status code is 200\", ()=> {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response status is 'success'\", ()=> {",
+							"    pm.expect(res.status).to.eql(\"success\");",
+							"});",
+							"",
+							"pm.test(\"Message is correct\", ()=> {",
+							"    pm.expect(res.message).to.eql(\"Todo updated successfully\");",
+							"});",
+							"",
+							"pm.test(\"Code is 200\", ()=> {",
+							"    pm.expect(res.code).to.eql(200);",
+							"});",
+							"",
+							"pm.test(\"Data object contains id and text\", ()=> {",
+							"    pm.expect(res.data).to.have.property(\"id\");",
+							"    pm.expect(res.data).to.have.property(\"text\");",
+							"    pm.expect(res.data.id).to.be.a(\"number\");",
+							"    pm.expect(res.data.text).to.be.a(\"string\");",
+							"});",
+							"",
+							"pm.test(\"Verify that request and response text match\",()=>{",
+							"    pm.expect(res.data.text).to.eql(update_text);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"text\": \"Buy groceries and milk\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/items/{{todoId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"items",
+						"{{todoId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Items Copy",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();",
+							"var update_text = pm.environment.get(\"update_text\");",
+							"",
+							"pm.test(\"Status code is 400\", ()=> {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response status is 'error'\", ()=> {",
+							"    pm.expect(res.status).to.eql(\"error\");",
+							"});",
+							"",
+							"pm.test(\"Message is correct\", ()=> {",
+							"    pm.expect(res.message).to.eql(\"Validation failed\");",
+							"});",
+							"",
+							"pm.test(\"Code is 400\", ()=> {",
+							"    pm.expect(res.code).to.eql(400);",
+							"});",
+							"",
+							"pm.test(\"Errors array contains 'Text is required' message\", ()=> {",
+							"    const errors = res.data.errors;",
+							"    ",
+							"    pm.expect(errors).to.be.an(\"array\").that.is.not.empty;",
+							"    ",
+							"    const textError = errors.find(err => err.path === \"text\");",
+							"    pm.expect(textError).to.be.an(\"object\");",
+							"    pm.expect(textError.msg).to.eql(\"Text must be a non-empty string\");",
+							"    pm.expect(textError.location).to.eql(\"body\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"text\": \"\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/items/{{todoId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"items",
+						"{{todoId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Items",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", ()=> {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"",
+							"pm.sendRequest({",
+							"    url: `http://localhost:5000/items/${pm.variables.get(\"todoId\")}`,",
+							"    method: 'DELETE',",
+							"    header: {",
+							"        'Content-Type': 'application/json'",
+							"    }",
+							"}, function (err, res) {",
+							"    if (err) {",
+							"        console.error(\"Request failed:\", err);",
+							"        return;",
+							"    }",
+							"",
+							"    console.log(\"DELETE response:\", res);",
+							"",
+							"    // Optional assertions if this is in the Tests tab",
+							"    pm.test(\"DELETE request should return 404\", ()=> {",
+							"        pm.expect(res.code).to.eql(404);",
+							"    });",
+							"",
+							"    pm.test(\"Response message should confirm deletion\", ()=> {",
+							"        const resp = res.json();",
+							"        pm.expect(resp.status).to.eql(\"error\");",
+							"        pm.expect(resp.message).to.eql(\"Todo not found\");",
+							"    });",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/items/{{todoId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"items",
+						"{{todoId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
