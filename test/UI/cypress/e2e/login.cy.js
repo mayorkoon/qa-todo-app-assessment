@@ -13,7 +13,7 @@ describe('Login Page UI Test', () => {
     loginPage.typeUsername(username)
     loginPage.typePassword(password)
     loginPage.clickLogin();
-    loginPage.todoHeader().should('be.visible')
+    loginPage.todoHeader().should('be.visible') // Successfully landed on the TODO page
   });
 
 });

@@ -22,8 +22,14 @@ class CrudPage {
     
 
     //actions
+    constructor(){
+        this.createTodo = ''
+        this.editTodo = ''
+    }
     typeItem(){
-        this.inputItem().type(faker.lorem.sentence(4))
+        const todo = faker.word.words(3)
+        this.createTodo = todo
+        this.inputItem().type(todo)
     }
     clickAdd(){
         this.addBtn().click()
@@ -35,7 +41,9 @@ class CrudPage {
         this.editInput().clear()
     }
     editText(){
-        this.editInput().type(faker.lorem.sentence(4))
+        const todo = faker.word.words(3)
+        this.editTodo = todo
+        this.editInput().type(todo)
     }
     clickSave(){
         this.saveBtn().click()
@@ -51,6 +59,12 @@ class CrudPage {
     }
     successDelete(){
         return cy.contains('Item removed successfully!')
+    }
+    getCreatedTodo(){
+        return this.createTodo
+    }
+    getEdited(){
+        return this.editTodo
     }
 }
 

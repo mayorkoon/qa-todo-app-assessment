@@ -14,7 +14,8 @@ describe("The CRUD test suite", ()=>{
     it("Create an item", ()=>{
         crudActions.typeItem();
         crudActions.clickAdd();
-        crudActions.successAdd().should('be.visible');
+        crudActions.successAdd().should('be.visible'); // Verify the successful toast
+        cy.contains(crudActions.getCreatedTodo()).should('be.visible') // Assert that the created item is visible on the list
     })
 
     it("Edits an item",()=>{
@@ -22,12 +23,14 @@ describe("The CRUD test suite", ()=>{
         crudActions.clearText()
         crudActions.editText();
         crudActions.clickSave();
-        crudActions.successEdit().should('be.visible');
+        crudActions.successEdit().should('be.visible'); // Verify the successful toast
+        cy.contains(crudActions.getEdited()).should('be.visible') // Assert that the Edited item is visible on the list
     })
 
     it("Deletes an item", ()=>{
         crudActions.clickDelete();
-        crudActions.successDelete().should('be.visible');
+        crudActions.successDelete().should('be.visible'); // Verify the successful toast
+        cy.contains(crudActions.getEdited()).should('not.exist')
     })
 
 }) 
