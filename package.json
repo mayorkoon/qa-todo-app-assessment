@@ -4,7 +4,7 @@
     "install-all": "npm --prefix backend install && npm --prefix frontend install && npm --prefix test/UI/cypress install",
     "start": "concurrently \"npm --prefix backend start\" \"npm --prefix frontend start\"",
     "test": "npm --prefix test/UI/cypress run test",
-    "test_api": "newman run test/API/todo.postman_collection.json -e test/API/TODO_APPruns .postman_environment.json --reporters cli"
+    "test_api": "newman run test/API/todo.postman_collection.json -e test/API/TODO_APP.postman_environment.json --reporters cli"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
