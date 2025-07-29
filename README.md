@@ -55,7 +55,7 @@ qa-todo-app/
 ### 1. Clone the Repo
 
 ```bash
-git https://github.com/mayorkoon/qa-todo-app-assessment.git
+git clone https://github.com/mayorkoon/qa-todo-app-assessment.git
 cd qa-todo-app-assessment
 ```
 
